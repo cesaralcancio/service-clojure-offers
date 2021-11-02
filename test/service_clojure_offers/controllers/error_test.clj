@@ -1,26 +1,12 @@
-(ns service-clojure-offers.datomic.error-test
+(ns service-clojure-offers.controllers.error-test
   (:require [clojure.test :refer :all]
             [service-clojure-offers.datomic.config :as config]
             [service-clojure-offers.datomic.offers :as d.offers]
             [service-clojure-offers.controllers.offers :as c.offers]
             [service-clojure-offers.common.utils :as utils]
-            [clojure.pprint :as pp]))
+            [service-clojure-offers.controllers.aux.prepare :as prepare]))
 
-(defn run-before-test [f]
-  ; prepare database
-  (config/delete-database! config/base-uri config/db-name-offers)
-  (config/create-database! config/base-uri config/db-name-offers)
-  (let [conn (config/connect! config/base-uri config/db-name-offers)]
-    (config/list-databases! config/base-uri)
-    ; process schema
-    (config/create-schema! conn d.offers/offer-schema)
-    ; delete all data
-    (doseq [offer (d.offers/find-all! (config/db! conn))]
-      (d.offers/delete-by-id! conn (:id offer))))
-  ; run tests
-  (f))
-
-(use-fixtures :once run-before-test)
+(use-fixtures :once prepare/database!)
 
 (deftest create-offer-v1-test
   (let [customer-id (utils/uuid)

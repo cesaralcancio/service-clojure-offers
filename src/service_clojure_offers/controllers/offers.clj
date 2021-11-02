@@ -3,6 +3,7 @@
             [service-clojure-offers.business.offers :as b.offers]))
 
 (defn create-offer-v1!
+  "Version that emulates the race condition error"
   [datomic offer]
   (let [customer-id (:customer-id offer)
         offers (d.offers/find-by-customer-id! (:db datomic) customer-id)
@@ -13,10 +14,12 @@
       (d.offers/upsert-one! (:conn datomic) offer))))
 
 (defn create-offer-v2!
+  "Version that uses the transaction function to avoid race condition error"
   [datomic offer]
   (d.offers/upsert-one-with-validation! (:conn datomic) offer))
 
 (defn create-offer-v3!
+  "Version that uses the db-after to avoid race condition error"
   [datomic offer]
   (let [conn (:conn datomic)
         result (d.offers/upsert-one! conn offer)

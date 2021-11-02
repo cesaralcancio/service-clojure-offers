@@ -30,6 +30,7 @@
   (conj schema/offers add-offer))
 
 (defn upsert-one-with-validation!
+  "Update or insert one record using the transaction function"
   [conn offer]
   (d/transact conn [[:add-offer offer]]))
 
@@ -44,6 +45,7 @@
                [:db/add "temporary-new-db-id" :offer/created-at created-at]]))
 
 (defn find-all!
+  "Find all offers"
   [db]
   (d/q '[:find ?id ?customer-id ?status ?amount ?created-at
          :keys id customer-id status amount created-at
@@ -55,6 +57,7 @@
          [?e :offer/created-at ?created-at]] db))
 
 (defn find-by-customer-id!
+  "Find all offers by customer id"
   [db customer-id]
   (d/q '[:find ?id ?customer-id-in ?status ?amount ?created-at
          :keys id customer-id status amount created-at
@@ -67,6 +70,7 @@
          [?e :offer/created-at ?created-at]] db customer-id))
 
 (defn delete-by-id!
+  "Delete offers by offer id"
   [conn id]
   (d/transact conn [[:db/retract [:offer/id id] :offer/id]
                     [:db/retract [:offer/id id] :offer/customer-id]
