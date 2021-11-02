@@ -7,14 +7,14 @@
    :db/fn    #db/fn {:lang   :clojure
                      :params [db offer]
                      :code   (let [customer-id (:customer-id offer)
-                                   all (d/q '[:find ?id
-                                              :keys id
-                                              :in $ ?customer-id-in
-                                              :where
-                                              [?e :offer/id ?id]
-                                              [?e :offer/customer-id ?customer-id-in]
-                                              [?e :offer/status :available]]
-                                            db customer-id)
+                                   all (datomic.api/q '[:find ?id
+                                                        :keys id
+                                                        :in $ ?customer-id-in
+                                                        :where
+                                                        [?e :offer/id ?id]
+                                                        [?e :offer/customer-id ?customer-id-in]
+                                                        [?e :offer/status :available]]
+                                                      db customer-id)
                                    offers (conj all offer)]
                                (if (<= (count offers) 3)
                                  [{:offer/id          (:id offer)
