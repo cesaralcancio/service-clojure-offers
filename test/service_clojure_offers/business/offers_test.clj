@@ -6,11 +6,11 @@
 (deftest exceed-maximum-available?-test
   (testing "When offers is empty, it must return false"
     (is (not (b.offers/exceed-maximum-available? []))))
-  (testing "When there is 4 offers, it must return true"
+  (testing "When there are 4 offers, it must return true"
     (let [customer-id (u/uuid)
           offer (u/dummy-offer customer-id)]
       (is (b.offers/exceed-maximum-available? [offer offer offer offer]))))
-  (testing "When there is 4 offers but 1 is expired, it must return false"
+  (testing "When there are 4 offers but 1 is expired, it must return false"
     (let [customer-id (u/uuid)
           offer-expired (assoc (u/dummy-offer (u/uuid)) :status :expired)
           offer (u/dummy-offer customer-id)]
