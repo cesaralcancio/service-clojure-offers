@@ -1,4 +1,4 @@
-(ns service-clojure-offers.controllers.solution-test
+(ns service-clojure-offers.controllers.solution-v1-test
   (:require [clojure.test :refer :all]
             [service-clojure-offers.datomic.config :as config]
             [service-clojure-offers.datomic.offers :as d.offers]
